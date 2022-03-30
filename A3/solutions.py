@@ -176,10 +176,11 @@ def elapseTime(self, gameState):
     current position is known.
     """
     "*** YOUR CODE HERE ***"
-    pos_dict = {}
+    # pos_dict = {}
+    pos_dict = inference.DiscreteDistribution()
 
-    for pos in self.allPositions:
-        pos_dict[pos] = 0
+    # for pos in self.allPositions:
+    #     pos_dict[pos] = 0
 
     for oldPos in self.allPositions:
         # for each old position p, the new position ditribution is the probablity
@@ -191,5 +192,6 @@ def elapseTime(self, gameState):
             pos_dict[pos] = pos_dict[pos] + newPosDist[pos] * self.beliefs[oldPos]
 
     # update the Discrete Distribution to what the updated positions looks like
-    for pos in self.allPositions:
-        self.beliefs[pos] = pos_dict[pos]
+    # for pos in self.allPositions:
+    #     self.beliefs[pos] = pos_dict[pos]
+    self.beliefs = pos_dict
