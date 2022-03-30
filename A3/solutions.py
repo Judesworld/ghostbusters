@@ -55,8 +55,6 @@ def normalize(self):
                 # Normalize 
                 self[i] = val/totalValue
 
-    
-
 def sample(self):
     """
     Draw a random sample from the distribution and return the i, weighted
@@ -100,10 +98,10 @@ def sample(self):
                 samples.append(item)
 
     # Choose a random sample
+    ran = random.randint(0, len(samples)-1)
+
+    return samples[ran]
     
-
-
-    #raiseNotDefined() #TAKE THIS OUT?? 
 
 def getObservationProb(self, noisyDistance, pman_pos, ghostPosition, jail_pos):
     """
@@ -162,9 +160,6 @@ def observeUpdate(self, observation, gameState):
     dist.normalize()
     self.beliefs = dist
     
-    
-    
-
 
 def elapseTime(self, gameState):
     """
