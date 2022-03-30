@@ -152,11 +152,19 @@ def observeUpdate(self, observation, gameState):
     #Getting distribution
     dist = inference.DiscreteDistribution()
 
+    #iterate over all the positions
     for i in range(0, len(self.allPositions)):
+
+        #set the current position 
         pos = self.allPositions[i]
+
+        #get current probabilities
         probability = self.getObservationProb(observation, pman_pos, pos, jail_pos)
+
+        #set probability distribution
         dist[pos] = self.beliefs[pos] * probability
-       
+    
+    #normalize
     dist.normalize()
     self.beliefs = dist
     
