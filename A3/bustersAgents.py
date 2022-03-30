@@ -12,6 +12,7 @@
 # Pieter Abbeel (pabbeel@cs.berkeley.edu).
 
 
+from math import dist
 import util
 from game import Agent
 from game import Directions
@@ -91,7 +92,7 @@ class BustersAgent:
         return gameState
 
     def getAction(self, gameState):
-        "Updates beliefs, then chooses an action based on updated beliefs."
+        "Updates beliefs, then chooses an move based on updated beliefs."
         for index, inf in enumerate(self.inferenceModules):
             if not self.firstMove and self.elapseTimeEnable:
                 inf.elapseTime(gameState)
@@ -127,14 +128,14 @@ class GreedyBustersAgent(BustersAgent):
     "An agent that charges the closest ghost."
 
     def registerInitialState(self, gameState):
-        "Pre-computes the distance between every two points."
+        "Pre-computes the dist between every two points."
         BustersAgent.registerInitialState(self, gameState)
         self.distancer = Distancer(gameState.data.layout, False)
 
     def chooseAction(self, gameState):
         """
         First computes the most likely position of each ghost that has
-        not yet been captured, then chooses an action that brings
+        not yet been captured, then chooses an move that brings
         Pacman closest to the closest ghost (according to mazeDistance!).
         """
         pacmanPosition = gameState.getPacmanPosition()
@@ -144,9 +145,55 @@ class GreedyBustersAgent(BustersAgent):
             [beliefs for i, beliefs in enumerate(self.ghostBeliefs)
              if livingGhosts[i+1]]
 
-
-
-
         "*** YOUR CODE HERE ***"
+
+        #Initalizing optimal move
+        best_action = None
+        #Initalizing optimal dist
+        shortest_distance = None
+
+        #iterate over all living ghosts positions
+        for i in range(0, len(livingGhostPositionDistributions)):
+    
+            #initalizing variable to store current test values
+            potential_pos = None
+            potential_prob = None
+
+            #Getting current belief
+            belief = livingGhostPositionDistributions[i]
+
+            #iterating over the positions and probability for each belief
+            for position, probability in belief.items():
+
+                #if no probability OR current prob is more likley,
+                if potential_prob == None or probability > potential_prob:
+
+                    #update the potential prob & position
+                    potential_pos = position
+                    potential_prob = probability
+                    
+            #iterating over the next legal pacman positions
+            for j in range(0, len(legal)):
+
+                #getting the current position to explore
+                move = legal[j]
+
+                #next move after action taking
+                new_pos = Actions.getSuccessor(pacmanPosition, move)
+
+                #getting the new distance
+                dist = self.distancer.getDistance(new_pos, potential_pos)
+
+                #if no best action OR new dist is shortest than previous distance
+                if best_action == None or dist < shortest_distance:
+
+                    #update the new best action and shortest distance
+                    best_action = move
+                    shortest_distance = dist
+
+        #return the best action
+        return best_action
+
+        
 
 
