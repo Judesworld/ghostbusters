@@ -44,9 +44,10 @@ def normalize(self):
     """
     # Used for normalizing
     totalValue = self.total()
+    itemsDict = self.items()
 
     # Items are not empty 
-    if self.items() is not {}: 
+    if itemsDict is not {}: 
         for i, val in self.items():
             if val == 0: 
                 # Cannot be normalized, so return 
@@ -81,27 +82,26 @@ def sample(self):
 
     # Used for denormalizing
     totalValue = self.total()
+    itemsDict = self.items()
 
     # Check if each item is denormalized
-    for item, weight in self.items():
-        if weight >= 1: 
-
-            for i in range(weight):
+    for item, vals in itemsDict:
+        if vals >= 1: 
+            for i in range(vals):
                 # Append if denormalized
                 samples.append(item)
-        elif 0 < weight < 1: 
+        elif 0 < vals < 1: 
             # Denormalize if already normalized
-            denorm = weight * totalValue
+            denormalized = totalValue * vals
     
-            for j in range(denorm): 
+            for j in range(denormalized): 
                 # Append when denormalized
                 samples.append(item)
 
-    # Choose a random sample
-    ran = random.randint(0, len(samples)-1)
-
-    return samples[ran]
+    # Output variable
+    randSample = samples[random.randint(0, len(samples)-1)]
     
+    return randSample
 
 def getObservationProb(self, noisyDistance, pman_pos, ghostPosition, jail_pos):
     """
