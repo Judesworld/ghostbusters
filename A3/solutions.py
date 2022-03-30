@@ -123,8 +123,9 @@ def getObservationProb(self, noisyDistance, pman_pos, ghostPosition, jail_pos):
             return 0
 
     #If none of these, 
-    pacman_to_ghost = manhattanDistance(pman_pos, ghostPosition)
-    return busters.getObservationProbability(noisyDistance, pacman_to_ghost)
+    else:
+        pacman_to_ghost = manhattanDistance(pman_pos, ghostPosition)
+        return busters.getObservationProbability(noisyDistance, pacman_to_ghost)
 
 
 def observeUpdate(self, observation, gameState):
